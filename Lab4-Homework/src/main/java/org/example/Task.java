@@ -8,24 +8,17 @@ public class Task {
 
         int max = 0;
         boolean containsPair = false;
-        for (int i=0; i<tab.length; i++) {
-            int value = Math.abs(tab[i]);
+        for (int num: tab) {
+            int value = Math.abs(num);
 
-            if (!map.containsKey(value)) {
-                map.put(value, new int[]{tab[i], 0});
-            } else if (map.get(value)[0]*tab[i] < 0) {
+            map.computeIfAbsent(value, k -> new int[]{num, 0});
+            if (map.containsKey(value) && map.get(value)[0]*num < 0) {
                 containsPair = true;
-                if (value > max) {
-                    max = value;
-                }
-                map.get(value)[1] = tab[i];
+                max = Math.max(max, value);
+                map.get(value)[1] = num;
             }
         }
 
-        if (containsPair) {
-            return map.get(max);
-        }
-
-        return null;
+        return containsPair ? map.get(max) : null;
     }
 }
